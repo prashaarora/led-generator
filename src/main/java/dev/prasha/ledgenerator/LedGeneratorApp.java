@@ -14,7 +14,7 @@ public final class LedGeneratorApp {
     public static void main(String[] args) throws Exception {
         Config config = Config.from(args);
         LedFrameGenerator generator = new LedFrameGenerator();
-        List<BufferedImage> frames = generator.createFrames(config.message(), config.frameCount());
+        List<BufferedImage> frames = generator.createFrames(config.message(), config.frameCount(), config.scene());
 
         Files.createDirectories(config.outputDir());
         Path pngPath = config.outputDir().resolve("preview.png");
@@ -43,14 +43,18 @@ public final class LedGeneratorApp {
         }
     }
 
-    record Config(String message, Path outputDir, int frameCount, int delayMillis, String host) {
+    record Config(String message, Path outputDir, int frameCount, int delayMillis, String host, String scene) {
         static Config from(String[] args) {
-            String message = args.length > 0 && !args[0].isBlank() ? args[0] : "DEVOXX LED";
+            String message = args.length > 0 && !args[0].isBlank() ? args[0] : "DEVOXX BELGIUM";
             Path outputDir = args.length > 1 && !args[1].isBlank() ? Path.of(args[1]) : Path.of("output");
             int frameCount = args.length > 2 ? Integer.parseInt(args[2]) : 24;
             int delayMillis = args.length > 3 ? Integer.parseInt(args[3]) : 90;
             String host = System.getenv("PIXOO_HOST");
-            return new Config(message, outputDir, frameCount, delayMillis, host);
+            String scene = args.length > 4 ? args[4] : "raffle";
+            if (delayMillis < 10) {
+                throw new IllegalArgumentException("Frame delay must be at least 10 milliseconds");
+            }
+            return new Config(message, outputDir, frameCount, delayMillis, host, scene);
         }
     }
 }

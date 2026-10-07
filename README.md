@@ -4,7 +4,8 @@ Small Java 21 + Maven project that generates 64x64 LED-style visuals for a Pixoo
 
 ## What it does
 
-- Generates a 64x64 animated LED-style banner locally.
+- Generates 64x64 pixel-art animations: a ringed planet, synthwave sunset, or Belgian raffle with a waving flag and waffle.
+- Keeps the original scrolling banner as an optional scene.
 - Exports a static preview as `output/preview.png`.
 - Exports an animated preview as `output/preview.gif`.
 - Uses the official `pixoo-cli` release from Jixoo to send the generated PNG to a Pixoo 64 when `PIXOO_HOST` is set.
@@ -28,6 +29,19 @@ Arguments:
 2. Output directory
 3. Frame count
 4. Frame delay in milliseconds
+5. Scene: `raffle` (default), `planet`, `synthwave`, or `banner`
+
+## Pixel-art scenes
+
+These are procedural interpretations of the reference images, not exact copies. No image assets or extra dependencies are needed.
+
+```bash
+java -jar target/led-generator-1.0.0-all.jar "DEVOXX BELGIUM" output/raffle 48 80 raffle
+java -jar target/led-generator-1.0.0-all.jar "" output/planet 48 80 planet
+java -jar target/led-generator-1.0.0-all.jar "" output/synthwave 48 80 synthwave
+```
+
+Each run writes both `preview.png` and a looping `preview.gif` to its output directory. Running without arguments generates the raffle scene. Choose `banner` to use the original scrolling text.
 
 ## Send to your Pixoo 64
 
